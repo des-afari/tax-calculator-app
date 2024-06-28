@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Pressable, ScrollView } from 'react-native'
+import { calculateGrossSalary } from './components/SalaryCalculator'
 
 export default function App() {
   const [netSalary, setNetSalary] = useState('')
@@ -12,7 +13,12 @@ export default function App() {
     }
   }
 
-  const handlePress = () => {}
+  const handlePress = () => {
+    const net = parseFloat(netSalary|0)
+    const allowance = parseFloat(allowances|0)
+    const calculation = calculateGrossSalary(net, allowance)
+    setResult(calculation)
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -37,11 +43,11 @@ export default function App() {
       </Pressable>
       {result && (
         <View style={styles.resultContainer}>
-          <Text style={styles.resultText}>Gross Salary: GHS {result.grossSalary}</Text>
-          <Text style={styles.resultText}>Basic Salary: GHS {result.basicSalary}</Text>
-          <Text style={styles.resultText}>Total PAYE Tax: GHS {result.payeTax}</Text>
-          <Text style={styles.resultText}>Employee Pension Amt: GHS {result.employeePension}</Text>
-          <Text style={styles.resultText}>Employer Pension Amt: GHS {result.employerPension}</Text>
+          <Text style={styles.resultText}>Gross Salary: <span style={styles.resultValue}>GHS {result.grossSalary}</span></Text>
+          <Text style={styles.resultText}>Basic Salary: <span style={styles.resultValue}>GHS {result.basicSalary}</span></Text>
+          <Text style={styles.resultText}>Total PAYE Tax: <span style={styles.resultValue}>GHS {result.payeTax}</span></Text>
+          <Text style={styles.resultText}>Employee Pension Amt: <span style={styles.resultValue}>GHS {result.employeePensionAmt}</span></Text>
+          <Text style={styles.resultText}>Employer Pension Amt: <span style={styles.resultValue}>GHS {result.employerPensionAmt}</span></Text>
         </View>
       )}
     </ScrollView>
@@ -87,5 +93,8 @@ const styles = StyleSheet.create({
   resultText: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  resultValue: {
+    fontWeight: "600"
   }
 })
