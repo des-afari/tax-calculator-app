@@ -5,7 +5,7 @@ const pensionRates = {
   tier3: { employer: 0.05, employee: 0.05 },
 }
 
-const calculatePensionContribution = (basicSalary: number) => {
+export const calculatePensionContribution = (basicSalary: number) => {
   const { tier1, tier2, tier3 } = pensionRates
 
   return {
@@ -29,21 +29,23 @@ const taxBrackets = [
   { limit: Infinity, rate: 0.3 },
 ]
 
-const calculatePAYETax = (taxableIncome: number) => {
+export const calculatePAYETax = (taxableIncome) => {
   let payeTax = 0
   let remainingIncome = taxableIncome
+  let previousLimit = 0
 
   for (const bracket of taxBrackets) {
     if (remainingIncome <= 0) break
-    const taxableAmountInBracket = Math.min(remainingIncome, bracket.limit)
+    const taxableAmountInBracket = Math.min(remainingIncome, bracket.limit - previousLimit)
     payeTax += taxableAmountInBracket * bracket.rate
     remainingIncome -= taxableAmountInBracket
+    previousLimit = bracket.limit
   }
 
   return payeTax
 }
 
-const calculateBasicSalary = (grossSalary: number, allowances: number) => {
+export const calculateBasicSalary = (grossSalary: number, allowances: number) => {
   return grossSalary - allowances
 }
 
